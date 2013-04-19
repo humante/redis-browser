@@ -1,0 +1,115 @@
+doctype html
+html ng-app="browser"
+  head
+    title Redis Browser
+
+    script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"
+    script type="text/javascript" src="/js/ui-bootstrap-tpls-0.2.0.min.js"
+    / script type="text/javascript" src="/js/tree.js"
+    script type="text/javascript" src="/js/app.js"
+
+    link rel="stylesheet" href="/css/bootstrap.min.css"
+    link rel="stylesheet" href="/css/app.css"
+
+    script type="text/ng-template" id="nav-tree-item.html"
+      span ng-show="key.children.length > 0"
+        button.btn.tree-toggle ng-hide="key.open" ng-click="key.open = true" +
+        button.btn.tree-toggle ng-show="key.open" ng-click="key.open = false" -
+      span ng-show="key.children.length == 0" -&nbsp;
+
+      a href="#" ng-click="show(key)" {{ key.name }}
+      / | {{ key.name }}
+      / <button class="btn btn-primary" ng-click="add(data)">Add node</button>
+      / <button class="btn btn-primary" ng-click="delete(data)" ng-show="data.nodes.length > 0">Delete nodes</button>
+      ul
+        li ng-repeat="key in key.children" ng-include="'nav-tree-item.html'"
+
+
+
+  body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container-fluid
+          button.btn.btn-navbar type="button" data-toggle="collapse" data-target=".nav-collapse"
+            span.icon-bar
+            span.icon-bar
+          a.brand href="#" Project name
+
+          .nav-collapse.collapse
+            p.navbar-text.pull-right
+              | Logged in as <a href="#" class="navbar-link">Username</a>
+            ul.nav
+              li.active
+                a href="#" Home
+              li
+                a href="#about" About
+              li
+                a href="#contact" Contact
+
+
+    .container-fluid ng-controller="BrowserCtrl"
+      .row-fluid
+        .span3
+          .well.sidebar-nav.tree
+            ul
+              li ng-repeat="key in keys" ng-include="'nav-tree-item.html'"
+
+            / | {{ hello }}
+            / ul.nav.nav-list
+            /   li.nav-header ng-repeat="key in keys"
+            /     | {{ key }}
+              / <li class="nav-header">Sidebar</li>
+              / <li class="active"><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li class="nav-header">Sidebar</li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li class="nav-header">Sidebar</li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+              / <li><a href="#">Link</a></li>
+
+        .span9
+          h4
+            ' {{ key.name }}
+            small {{ key.type }}
+
+          div ng-switch="key.type"
+            pre ng-switch-when="string" {{ key.value }}
+
+            div ng-switch-when="list"
+              .alert
+                ' Showing
+                strong
+                  ' {{ list.per_page }}
+                ' items from
+                strong
+                  ' {{ list.start }}
+                ' to
+                strong
+                  ' {{ list.stop }}
+                ' out of
+                strong {{ key.length }}
+
+              pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
+
+              table.table.table-stripped.table-bordered.value-list
+                tr
+                  th.value-list-index Index
+                  th Value
+                tr ng-repeat="e in key.values"
+                  td {{ e.index }}
+                  td ng-switch="e.type"
+                    pre ng-switch-when="json" {{ e.value | json }}
+                    pre ng-switch-when="string" {{ e.value }}
+
+            span.alert.alert-danger ng-switch-default="" Key not found
+
+
+

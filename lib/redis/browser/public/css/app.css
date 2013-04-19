@@ -1,0 +1,40 @@
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+.sidebar-nav {
+  padding: 9px 0;
+}
+
+@media (max-width: 980px) {
+  /* Enable use of floated navbar text */
+  .navbar-text.pull-right {
+    float: none;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+.tree ul {
+  list-style: none;
+  margin-left: 12px;
+  font-family: "Monaco";
+  font-size: 11px;
+}
+
+.tree ul li {
+  line-height: 15px;
+}
+
+.tree-toggle {
+  padding: 2px 3px 4px 3px;
+  width: 12px;
+  font-size: 10px;
+  line-height: 6px;
+  margin-right: 5px;
+}
+
+
+.value-list-index {
+  width: 30px;
+}
