@@ -33,18 +33,19 @@ html ng-app="browser"
           button.btn.btn-navbar type="button" data-toggle="collapse" data-target=".nav-collapse"
             span.icon-bar
             span.icon-bar
-          a.brand href="#" Project name
+          a.brand href="/" Redis Browser
 
           .nav-collapse.collapse
             p.navbar-text.pull-right
-              | Logged in as <a href="#" class="navbar-link">Username</a>
-            ul.nav
-              li.active
-                a href="#" Home
-              li
-                a href="#about" About
-              li
-                a href="#contact" Contact
+              ' Connected to
+              strong 127.0.0.1:6379
+            / ul.nav
+            /   li.active
+            /     a href="#" Home
+            /   li
+            /     a href="#about" About
+            /   li
+            /     a href="#contact" Contact
 
 
     .container-fluid ng-controller="BrowserCtrl"
@@ -53,28 +54,6 @@ html ng-app="browser"
           .well.sidebar-nav.tree
             ul
               li ng-repeat="key in keys" ng-include="'nav-tree-item.html'"
-
-            / | {{ hello }}
-            / ul.nav.nav-list
-            /   li.nav-header ng-repeat="key in keys"
-            /     | {{ key }}
-              / <li class="nav-header">Sidebar</li>
-              / <li class="active"><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li class="nav-header">Sidebar</li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li class="nav-header">Sidebar</li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-              / <li><a href="#">Link</a></li>
-
         .span9
           h4
             ' {{ key.name }}
