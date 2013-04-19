@@ -74,9 +74,21 @@ html ng-app="browser"
                 strong
                   ' {{ list.stop }}
                 ' out of
-                strong {{ key.length }}
+                strong
+                  ' {{ key.length }}
+                ' ( {{ list.pages }} pages )
 
-              pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
+              .row-fluid
+                .span8
+                  pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
+
+                .span4
+                  .dropdown.per-page
+                    a.dropdown-toggle
+                      | {{ list.per_page }} per page
+                    ul.dropdown-menu
+                      li ng-repeat="i in [10,20,50,100,200]"
+                        a ng-click="setPerPage(i)" {{ i }}
 
               table.table.table-stripped.table-bordered.value-list
                 tr
@@ -87,6 +99,8 @@ html ng-app="browser"
                   td ng-switch="e.type"
                     pre ng-switch-when="json" {{ e.value | json }}
                     pre ng-switch-when="string" {{ e.value }}
+
+              pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
 
             span.alert.alert-danger ng-switch-default="" Key not found
 

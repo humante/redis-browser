@@ -16,14 +16,27 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
     API.get(key: key.full).then (e) ->
       $scope.key = e
 
+      $scope.setPerPage = (i) ->
+        $scope.list.per_page = i
+        $scope.list.pages = parseInt($scope.key.length / $scope.list.per_page)
+        update_start_stop()
+        update()
+
       update_start_stop = ->
-        $scope.list.start = per_page * ($scope.list.current - 1)
-        $scope.list.stop = (per_page * $scope.list.current) - 1
+        $scope.list.start = $scope.list.per_page * ($scope.list.current - 1)
+        $scope.list.stop = ($scope.list.per_page * $scope.list.current) - 1
+
+      update = ->
+        API.get(
+          key:    key.full
+          start: $scope.list.start
+          stop:  $scope.list.stop
+        ).then((e) -> $scope.key = e)
 
       switch e.type
         when "list"
-          per_page = 100
           $scope.list =
+            per_page: 100
             pages:    parseInt(e.length / 100)
             current:  1
             max:      10
@@ -31,10 +44,6 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
 
       $scope.$watch "list.current", () ->
         update_start_stop()
-        API.get(
-          key:    key.full
-          start: $scope.list.start
-          stop:  $scope.list.stop
-        ).then((e) -> $scope.key = e)
+        update()
 
 
