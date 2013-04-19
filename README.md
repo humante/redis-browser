@@ -1,24 +1,14 @@
-# Redis::Browser
+# Redis Browser
 
-TODO: Write a gem description
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'redis-browser'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install redis-browser
 
 ## Usage
 
-TODO: Write usage instructions here
+```bash
+$ git clone git@github.com:teamon/redis-browser.git
+$ cd redis-browser
+$ bundle
+$ bundle exec ruby lib/redis-browser/app.rb
+```
 
 ## Contributing
 

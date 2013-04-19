@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'redis/browser/version'
+require 'redis-browser/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "redis-browser"
-  spec.version       = Redis::Browser::VERSION
+  spec.version       = RedisBrowser::VERSION
   spec.authors       = ["Tymon Tobolski"]
   spec.email         = ["i@teamon.eu"]
   spec.description   = %q{Simple redis browser}
@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "sass"
   spec.add_runtime_dependency "coffee-script"
   spec.add_runtime_dependency "multi_json"
+  spec.add_runtime_dependency "redis"
 end

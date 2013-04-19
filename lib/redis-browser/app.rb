@@ -1,3 +1,4 @@
+require File.expand_path("../version", __FILE__)
 require 'sinatra/base'
 require 'multi_json'
 require 'sinatra/json'
@@ -102,10 +103,4 @@ class App < Sinatra::Base
   def browser
     @browser ||= Browser.new
   end
-end
-
-
-
-if __FILE__ == $0
-    App.run! :port => 4567
 end
