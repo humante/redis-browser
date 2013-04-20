@@ -21,7 +21,7 @@ class Browser
     @db = db
   end
 
-  def keys_tree(sep = /:+|\//)
+  def keys_tree(sep = /:+|\/|\.+/)
     keys = {}
     full = {}
 
