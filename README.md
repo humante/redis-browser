@@ -2,21 +2,32 @@
 
 ## Features
 
-* List all keys as tree (using customizable characters as namespace separator)
+* List all keys as tree
 * See content of all redis types
 * List pagination
 * Pretty print json values
 * Search keys
 
 
+## Installation
+
+```bash
+$ gem install redis-browser
+```
+
 ## Usage
 
 ```bash
-$ git clone git@github.com:teamon/redis-browser.git
-$ cd redis-browser
-$ bundle
-$ bundle exec ruby lib/redis-browser/app.rb
+$ redis-browser
 ```
+
+## Screenshots
+
+![Browse keys](https://dl.dropboxusercontent.com/u/70986/redis-browser/2.png)
+![See list with pagination](https://dl.dropboxusercontent.com/u/70986/redis-browser/3.png)
+![ZSET support](https://dl.dropboxusercontent.com/u/70986/redis-browser/4.png)
+![JSON pretty print](https://dl.dropboxusercontent.com/u/70986/redis-browser/5.png)
+![Configuration](https://dl.dropboxusercontent.com/u/70986/redis-browser/6.png)
 
 ## Contributing
 

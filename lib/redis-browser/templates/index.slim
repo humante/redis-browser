@@ -84,6 +84,8 @@ html ng-app="browser"
           div ng-switch="key.type"
             pre ng-switch-when="string" {{ key.value }}
 
+            pre ng-switch-when="json" {{ key.value | json }}
+
             div ng-switch-when="set"
               table.table.table-striped.table-bordered.value-list
                 tr ng-repeat="e in key.values"

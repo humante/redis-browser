@@ -117,7 +117,8 @@ class Browser
     type = redis.type(key)
     data = case type
     when "string"
-      {:value => redis.get(key)}
+      type, value = item_type(redis.get(key))
+      {:value => value, :type => type}
     when "list"
       get_list(key, opts)
     when "set"
