@@ -5,7 +5,6 @@ html ng-app="browser"
 
     script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"
     script type="text/javascript" src="/js/ui-bootstrap-tpls-0.2.0.min.js"
-    / script type="text/javascript" src="/js/tree.js"
     script type="text/javascript" src="/js/app.js"
 
     link rel="stylesheet" href="/css/bootstrap.min.css"
@@ -17,16 +16,36 @@ html ng-app="browser"
         button.btn.tree-toggle ng-show="key.open" ng-click="key.open = false" -
       span ng-show="key.children.length == 0" -&nbsp;
 
-      a href="#" ng-click="show(key)" {{ key.name }}
-      / | {{ key.name }}
-      / <button class="btn btn-primary" ng-click="add(data)">Add node</button>
-      / <button class="btn btn-primary" ng-click="delete(data)" ng-show="data.nodes.length > 0">Delete nodes</button>
-      ul
+      a ng-show="key.full" href="#" ng-click="show(key)" {{ key.name }}
+      span ng-hide="key.full" href="#" ng-click="key.open = true" {{ key.name }}
+
+      ul ng-show="key.open"
         li ng-repeat="key in key.children" ng-include="'nav-tree-item.html'"
 
 
 
-  body
+  body ng-controller="BrowserCtrl"
+    div modal="config.show" close="config.close()" options="config.opts"
+      .form-horizontal
+        .modal-header
+          button.close type="button" ng-click="config.close()" &times;
+          h4 Configure Redis Connection
+        .modal-body
+          .control-group
+            label.control-label for="config-host" Host
+            .controls
+              input type="text" id="config-host" ng-model="config.host"
+          .control-group
+            label.control-label for="config-port" Port
+            .controls
+              input type="text" id="config-port" ng-model="config.port"
+          .control-group
+            label.control-label for="config-database" Database
+            .controls
+              select id="config-database" ng-model="config.database" ng-options="i for i in config.databases"
+        .modal-footer
+          button.btn.btn-success type="submit" ng-click="config.save()" Save
+
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
         .container-fluid
@@ -36,19 +55,14 @@ html ng-app="browser"
           a.brand href="/" Redis Browser
 
           .nav-collapse.collapse
+            p.pull-right
+              button.btn.btn-success ng-click="config.open()" Configure
             p.navbar-text.pull-right
               ' Connected to
-              strong 127.0.0.1:6379
-            / ul.nav
-            /   li.active
-            /     a href="#" Home
-            /   li
-            /     a href="#about" About
-            /   li
-            /     a href="#contact" Contact
+              strong {{ config.host }}:{{ config.port }}
 
 
-    .container-fluid ng-controller="BrowserCtrl"
+    .container-fluid
       .row-fluid
         .span3
           .well.sidebar-nav.tree
@@ -61,6 +75,36 @@ html ng-app="browser"
 
           div ng-switch="key.type"
             pre ng-switch-when="string" {{ key.value }}
+
+            div ng-switch-when="set"
+              table.table.table-stripped.table-bordered.value-list
+                tr ng-repeat="e in key.values"
+                  td ng-switch="e.type"
+                    pre ng-switch-when="json" {{ e.value | json }}
+                    pre ng-switch-when="string" {{ e.value }}
+
+            div ng-switch-when="zset"
+              table.table.table-stripped.table-bordered.value-list
+                tr
+                  th Value
+                  th.value-zset-score Score
+                tr ng-repeat="e in key.values"
+                  td ng-switch="e.type"
+                    pre ng-switch-when="json" {{ e.value | json }}
+                    pre ng-switch-when="string" {{ e.value }}
+                  td {{ e.score }}
+
+
+            div ng-switch-when="hash"
+              table.table.table-stripped.table-bordered.value-list
+                tr
+                  th Key
+                  th Value
+                tr ng-repeat="(k,e) in key.value"
+                  td {{ k }}
+                  td ng-switch="e.type"
+                    pre ng-switch-when="json" {{ e.value | json }}
+                    pre ng-switch-when="string" {{ e.value }}
 
             div ng-switch-when="list"
               .alert
@@ -101,6 +145,8 @@ html ng-app="browser"
                     pre ng-switch-when="string" {{ e.value }}
 
               pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
+
+            span.alert.alert-success ng-switch-when="empty" Select something on the left
 
             span.alert.alert-danger ng-switch-default="" Key not found
 

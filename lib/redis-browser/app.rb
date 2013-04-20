@@ -16,11 +16,13 @@ class CoffeeHandler < Sinatra::Base
 end
 
 class Browser
-  def keys_tree(sep = ":")
+  def keys_tree(sep = /:+|\//)
     keys = {}
+    full = {}
 
     redis.keys.each do |key|
-      chunks = key.split(sep)
+      chunks = key.split(sep, 7)
+      full[chunks] = key
       chunks.inject(keys) do |xs, x|
         xs[x] ||= {}
         xs[x]
@@ -28,17 +30,26 @@ class Browser
     end
 
     f = lambda do |prefix, hash|
+
       hash.map do |k,v|
         np = (prefix + [k])
         {
           :name => k,
-          :full => np.join(sep),
+          :full => full[np],
           :children => f.call(np, v)
         }
-      end
+      end.sort_by {|k| k[:name] }
     end
 
     f.call([], keys)
+  end
+
+  def item_type(e)
+    begin
+      ["json", MultiJson.decode(e)]
+    rescue MultiJson::LoadError => ex
+      ["string", e]
+    end
   end
 
   def get_list(key, opts = {})
@@ -47,16 +58,38 @@ class Browser
 
     length = redis.llen(key)
     values = redis.lrange(key, start, stop).map.with_index do |e, i|
-      type, value = begin
-        ["json", MultiJson.decode(e)]
-      rescue MultiJson::LoadError => ex
-        ["string", e]
-      end
-
+      type, value = item_type(e)
       {:type => type, :value => value, :index => start + i}
     end
 
     {:length => length, :values => values}
+  end
+
+  def get_set(key)
+    values = redis.smembers(key).map do |e|
+      type, value = item_type(e)
+      {:type => type, :value => value}
+    end
+
+    {:values => values }
+  end
+
+  def get_zset(key)
+    values = redis.zrange(key, 0, -1, :withscores => true).map do |e, score|
+      type, value = item_type(e)
+      {:type => type, :value => value, :score => score}
+    end
+
+    {:values => values }
+  end
+
+  def get_hash(key)
+    value = Hash[redis.hgetall(key).map do |k,v|
+      type, value = item_type(v)
+      [k, {:type => type, :value => value}]
+    end]
+
+    {:value => value}
   end
 
   def get(key, opts = {})
@@ -66,6 +99,12 @@ class Browser
       {:value => redis.get(key)}
     when "list"
       get_list(key, opts)
+    when "set"
+      get_set(key)
+    when "zset"
+      get_zset(key)
+    when "hash"
+      get_hash(key)
     else
       {:value => "Not found"}
     end

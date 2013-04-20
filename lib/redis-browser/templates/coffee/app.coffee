@@ -10,7 +10,27 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
 ]
 
 @BrowserCtrl = ($scope, API) ->
+  $scope.config =
+    host: "127.0.0.1"
+    port: 6379
+    database: 0
+    databases: [0..15]
+    open: ->
+      $scope.config.show = true
+    close: ->
+      $scope.config.show = false
+    save: ->
+      $scope.config.close() # TODO: Do something with config
+    opts:
+      backdropFade: true
+      dialogFade: true
+
+
+  $scope.configure = () ->
+    $scope.configuring = true
+
   $scope.keys = API.keys()
+  $scope.key = {type: "empty"}
 
   $scope.show = (key) ->
     API.get(key: key.full).then (e) ->
@@ -43,8 +63,8 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
 
           update()
 
-      $scope.$watch "list.current", () ->
-        update()
-        fetch()
+          $scope.$watch "list.current", () ->
+            update()
+            fetch()
 
 
