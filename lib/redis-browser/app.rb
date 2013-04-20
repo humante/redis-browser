@@ -110,7 +110,7 @@ class Browser
     end
 
     {
-      :name => key,
+      :full => key,
       :type => type
     }.merge(data)
   end

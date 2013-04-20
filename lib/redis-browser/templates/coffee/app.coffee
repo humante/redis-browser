@@ -31,28 +31,11 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
 
   $scope.keys = API.keys()
   $scope.key = {type: "empty"}
+  $scope.list = {}
 
   $scope.show = (key) ->
     API.get(key: key.full).then (e) ->
       $scope.key = e
-
-      update = ->
-        $scope.list.pages = Math.ceil($scope.key.length / $scope.list.per_page)
-        $scope.list.start = $scope.list.per_page * ($scope.list.current - 1)
-        $scope.list.stop = ($scope.list.per_page * $scope.list.current) - 1
-
-      $scope.setPerPage = (i) ->
-        $scope.list.per_page = i
-        $scope.list.current = 1
-        update()
-        fetch()
-
-      fetch = ->
-        API.get(
-          key:    key.full
-          start: $scope.list.start
-          stop:  $scope.list.stop
-        ).then((e) -> $scope.key = e)
 
       switch e.type
         when "list"
@@ -63,8 +46,28 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
 
           update()
 
-          $scope.$watch "list.current", () ->
-            update()
-            fetch()
+  update = ->
+    $scope.list.pages = Math.ceil($scope.key.length / $scope.list.per_page)
+    $scope.list.start = $scope.list.per_page * ($scope.list.current - 1)
+    $scope.list.stop = ($scope.list.per_page * $scope.list.current) - 1
+
+  $scope.setPerPage = (i) ->
+    $scope.list.per_page = i
+    $scope.list.current = 1
+    update()
+    fetch()
+
+  fetch = ->
+    API.get(
+      key:    $scope.key.full
+      start:  $scope.list.start
+      stop:   $scope.list.stop
+    ).then((e) -> $scope.key.values = e.values)
+
+
+  $scope.$watch "list.current", () ->
+    if $scope.key.type == "list"
+      update()
+      fetch()
 
 

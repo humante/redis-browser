@@ -70,7 +70,7 @@ html ng-app="browser"
               li ng-repeat="key in keys" ng-include="'nav-tree-item.html'"
         .span9
           h4
-            ' {{ key.name }}
+            ' {{ key.full }}
             small {{ key.type }}
 
           div ng-switch="key.type"
