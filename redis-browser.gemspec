@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = RedisBrowser::VERSION
   spec.authors       = ["Tymon Tobolski"]
   spec.email         = ["i@teamon.eu"]
-  spec.description   = %q{Simple redis browser}
-  spec.summary       = %q{Simple redis browser}
-  spec.homepage      = ""
+  spec.description   = %q{Redis browser}
+  spec.summary       = %q{Redis browser}
+  spec.homepage      = "http://github.com/teamon/redis-browser"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
