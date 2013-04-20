@@ -3,7 +3,7 @@ html ng-app="browser"
   head
     title Redis Browser
 
-    script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"
+    script type="text/javascript" src="/js/angular.min.js"
     script type="text/javascript" src="/js/ui-bootstrap-tpls-0.2.0.min.js"
     script type="text/javascript" src="/js/localStorageModule.js"
     script type="text/javascript" src="/js/app.js"
@@ -85,14 +85,14 @@ html ng-app="browser"
             pre ng-switch-when="string" {{ key.value }}
 
             div ng-switch-when="set"
-              table.table.table-stripped.table-bordered.value-list
+              table.table.table-striped.table-bordered.value-list
                 tr ng-repeat="e in key.values"
                   td ng-switch="e.type"
                     pre ng-switch-when="json" {{ e.value | json }}
                     pre ng-switch-when="string" {{ e.value }}
 
             div ng-switch-when="zset"
-              table.table.table-stripped.table-bordered.value-list
+              table.table.table-striped.table-bordered.value-list
                 tr
                   th Value
                   th.value-zset-score Score
@@ -104,7 +104,7 @@ html ng-app="browser"
 
 
             div ng-switch-when="hash"
-              table.table.table-stripped.table-bordered.value-list
+              table.table.table-striped.table-bordered.value-list
                 tr
                   th Key
                   th Value
@@ -142,7 +142,7 @@ html ng-app="browser"
                       li ng-repeat="i in [10,20,50,100,200]"
                         a ng-click="setPerPage(i)" {{ i }}
 
-              table.table.table-stripped.table-bordered.value-list
+              table.table.table-striped.table-bordered.value-list
                 tr
                   th.value-list-index Index
                   th Value
@@ -157,15 +157,20 @@ html ng-app="browser"
             span.alert.alert-success ng-switch-when="empty" Select something on the left
 
             div ng-switch-default=""
-              table.table.table-stripped.table-bordered
+              table.table.table-striped.table-bordered
                 tr
                   th Keys
                   th.keys-search
                     input.input-medium.search-query type="text" ng-model="query" placeholder="Search"
                 tr ng-repeat="e in key.values | filter:query"
-                  td colspan="2"
+                  td
                     a href="#" ng-click="show(e)" {{ e.name }}
-
+                  td
+                    button.btn.btn-danger ng-click="deleteKey(e)" Delete
+                tr
+                  td
+                  td
+                    button.btn.btn-danger ng-click="deleteAll()" Delete ALL
 
 
               / span.alert.alert-danger Key not found

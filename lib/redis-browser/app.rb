@@ -99,6 +99,20 @@ class Browser
     {:value => value}
   end
 
+  def get_keys(key)
+    key << "*" unless key.end_with?("*")
+
+    values = redis.keys(key).map do |k|
+      {:name => k, :full => k}
+    end
+
+    {:values => values}
+  end
+
+  def delete(pattern)
+    redis.del(redis.keys(pattern))
+  end
+
   def get(key, opts = {})
     type = redis.type(key)
     data = case type
@@ -113,13 +127,7 @@ class Browser
     when "hash"
       get_hash(key)
     else
-      key << "*" unless key.end_with?("*")
-
-      values = redis.keys(key).map do |k|
-        {:name => k, :full => k}
-      end
-
-      {:values => values}
+      get_keys(key)
     end
 
     {
@@ -168,6 +176,11 @@ class App < Sinatra::Base
 
   get '/key.json' do
     json browser.get(params[:key], params)
+  end
+
+  delete '/key.json' do
+    browser.delete(params[:key])
+    json :ok => true
   end
 
   def browser

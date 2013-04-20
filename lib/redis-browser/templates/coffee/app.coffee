@@ -13,10 +13,14 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
       get: (params) -> $http.get("/key.json", {
         params: angular.extend({}, ps, params)
       }).then (e) -> e.data
+
+      delete: (params) -> $http.delete("/key.json", {
+        params: angular.extend({}, ps, params)
+      })
     }
 ]
 
-@BrowserCtrl = ($scope, API, localStorageService) ->
+@BrowserCtrl = ($scope, API, localStorageService, $dialog) ->
   # Internal functions
   fetchValue = ->
     $scope.api.get(
@@ -88,6 +92,39 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
     $scope.list.current = 1
     updateList()
     fetchValue()
+
+  $scope.deleteKey = (key) ->
+    title = "Are you sure?"
+    msg = "Are you sure you want to delete key \n #{key.name}"
+    btns = [
+      {result:'cancel', label: 'Cancel'}
+      {result:'delete', label: 'Delete', cssClass: 'btn-danger'}
+    ]
+
+    $dialog.messageBox(title, msg, btns)
+      .open()
+      .then((result) ->
+        if result == "delete"
+          $scope.api.delete(key: key.name)
+          $scope.show($scope.key)
+      )
+
+  $scope.deleteAll = ->
+    title = "Are you sure?"
+    msg = "Are you sure you want to delete ALL keys matching \n #{$scope.key.full}"
+    btns = [
+      {result:'cancel', label: 'Cancel'}
+      {result:'delete', label: 'Delete ALL', cssClass: 'btn-danger'}
+    ]
+
+    $dialog.messageBox(title, msg, btns)
+      .open()
+      .then((result) ->
+        if result == "delete"
+          $scope.api.delete(key: $scope.key.full)
+          $scope.show($scope.key)
+      )
+
 
 
   # Scope watchers
