@@ -37,7 +37,7 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
       $scope.key = e
 
       update = ->
-        $scope.list.pages = parseInt($scope.key.length / $scope.list.per_page)
+        $scope.list.pages = Math.ceil($scope.key.length / $scope.list.per_page)
         $scope.list.start = $scope.list.per_page * ($scope.list.current - 1)
         $scope.list.stop = ($scope.list.per_page * $scope.list.current) - 1
 
