@@ -15,14 +15,14 @@ body {
   }
 }
 
-.tree ul {
+.tree {
   list-style: none;
   margin-left: 12px;
   font-family: "Monaco";
   font-size: 11px;
 }
 
-.tree ul li {
+.tree li {
   line-height: 15px;
 }
 
@@ -38,3 +38,5 @@ body {
 .value-list-index { width: 30px; }
 .value-zset-score { width: 30px; }
 .per-page { margin-top: 25px; }
+.connection-info { padding-right: 20px; }
+.keys-search { width: 100px; }

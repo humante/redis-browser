@@ -16,6 +16,11 @@ class CoffeeHandler < Sinatra::Base
 end
 
 class Browser
+  def initialize(conn = nil, db = 0)
+    @conn = conn
+    @db = db
+  end
+
   def keys_tree(sep = /:+|\//)
     keys = {}
     full = {}
@@ -23,9 +28,11 @@ class Browser
     redis.keys.each do |key|
       chunks = key.split(sep, 7)
       full[chunks] = key
-      chunks.inject(keys) do |xs, x|
+      chunks.inject([keys,[]]) do |(xs,n), x|
         xs[x] ||= {}
         xs[x]
+
+        [xs[x], n]
       end
     end
 
@@ -35,7 +42,7 @@ class Browser
         np = (prefix + [k])
         {
           :name => k,
-          :full => full[np],
+          :full => full[np] || np.join("*"),
           :children => f.call(np, v)
         }
       end.sort_by {|k| k[:name] }
@@ -106,7 +113,13 @@ class Browser
     when "hash"
       get_hash(key)
     else
-      {:value => "Not found"}
+      key << "*" unless key.end_with?("*")
+
+      values = redis.keys(key).map do |k|
+        {:name => k, :full => k}
+      end
+
+      {:values => values}
     end
 
     {
@@ -116,7 +129,21 @@ class Browser
   end
 
   def redis
-    @redis ||= Redis.new
+    @redis ||= begin
+      conn = @conn || "127.0.0.1:6379"
+      db = @db || 0
+
+      opts = if conn.start_with?("/")
+        {:path => conn}
+      else
+        host, port = conn.split(":", 2)
+        {:host => host, :port => port}
+      end
+
+      r = Redis.new(opts)
+      r.select(db)
+      r
+    end
   end
 end
 
@@ -131,8 +158,12 @@ class App < Sinatra::Base
     slim :index
   end
 
-  get '/keys.json' do
+  get '/keys_tree.json' do
     json browser.keys_tree
+  end
+
+  get '/keys.json' do
+    json browser.keys(params[:pattern])
   end
 
   get '/key.json' do
@@ -140,6 +171,6 @@ class App < Sinatra::Base
   end
 
   def browser
-    @browser ||= Browser.new
+    @browser ||= Browser.new(params[:connection], params[:database])
   end
 end

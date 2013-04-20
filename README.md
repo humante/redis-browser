@@ -1,5 +1,13 @@
 # Redis Browser
 
+## Features
+
+* List all keys as tree (using customizable characters as namespace separator)
+* See content of all redis types
+* List pagination
+* Pretty print json values
+* Search keys
+
 
 ## Usage
 

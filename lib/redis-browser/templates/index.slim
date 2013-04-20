@@ -5,6 +5,7 @@ html ng-app="browser"
 
     script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"
     script type="text/javascript" src="/js/ui-bootstrap-tpls-0.2.0.min.js"
+    script type="text/javascript" src="/js/localStorageModule.js"
     script type="text/javascript" src="/js/app.js"
 
     link rel="stylesheet" href="/css/bootstrap.min.css"
@@ -16,10 +17,9 @@ html ng-app="browser"
         button.btn.tree-toggle ng-show="key.open" ng-click="key.open = false" -
       span ng-show="key.children.length == 0" -&nbsp;
 
-      a ng-show="key.full" href="#" ng-click="show(key)" {{ key.name }}
-      span ng-hide="key.full" href="#" ng-click="key.open = true" {{ key.name }}
+      a href="#" ng-click="show(key)" {{ key.name }}
 
-      ul ng-show="key.open"
+      ul.tree ng-show="key.open"
         li ng-repeat="key in key.children" ng-include="'nav-tree-item.html'"
 
 
@@ -32,17 +32,21 @@ html ng-app="browser"
           h4 Configure Redis Connection
         .modal-body
           .control-group
-            label.control-label for="config-host" Host
+            label.control-label for="config-connection" Connection
             .controls
-              input type="text" id="config-host" ng-model="config.host"
-          .control-group
-            label.control-label for="config-port" Port
-            .controls
-              input type="text" id="config-port" ng-model="config.port"
+              input type="text" id="config-connection" ng-model="config.connection"
+              span.help-block
+                | Examples:
+                code 127.0.0.1:6379
+                | ,
+                code= "/tmp/redis.sock"
+                | etc.
+
           .control-group
             label.control-label for="config-database" Database
             .controls
               select id="config-database" ng-model="config.database" ng-options="i for i in config.databases"
+
         .modal-footer
           button.btn.btn-success type="submit" ng-click="config.save()" Save
 
@@ -57,16 +61,20 @@ html ng-app="browser"
           .nav-collapse.collapse
             p.pull-right
               button.btn.btn-success ng-click="config.open()" Configure
-            p.navbar-text.pull-right
+            p.navbar-text.pull-right.connection-info
               ' Connected to
-              strong {{ config.host }}:{{ config.port }}
+              strong {{ config.connection }}
 
 
     .container-fluid
       .row-fluid
         .span3
-          .well.sidebar-nav.tree
-            ul
+          .well.sidebar-nav
+            ul.nav.nav-list
+              li.nav-header
+                ' Keys
+                button.btn.btn-mini.pull-right ng-click="fetchKeys()" Reload
+            ul.tree
               li ng-repeat="key in keys" ng-include="'nav-tree-item.html'"
         .span9
           h4
@@ -148,7 +156,19 @@ html ng-app="browser"
 
             span.alert.alert-success ng-switch-when="empty" Select something on the left
 
-            span.alert.alert-danger ng-switch-default="" Key not found
+            div ng-switch-default=""
+              table.table.table-stripped.table-bordered
+                tr
+                  th Keys
+                  th.keys-search
+                    input.input-medium.search-query type="text" ng-model="query" placeholder="Search"
+                tr ng-repeat="e in key.values | filter:query"
+                  td colspan="2"
+                    a href="#" ng-click="show(e)" {{ e.name }}
+
+
+
+              / span.alert.alert-danger Key not found
 
 
 
