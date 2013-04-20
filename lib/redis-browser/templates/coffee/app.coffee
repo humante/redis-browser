@@ -45,7 +45,9 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
   $scope.config =
     connection: db.get("connection") || "127.0.0.1:6379"
     database:   parseInt(db.get("database")) || 0
+    hashView:   db.get("hashView") || "table"
     databases:  [0..15]
+
     open: ->
       $scope.config.show = true
     close: ->
@@ -59,7 +61,12 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
       $scope.show($scope.key)
 
       $scope.config.close()
-    opts:
+
+    setHashView: (view) ->
+      $scope.config.hashView = view
+      db.add("hashView", view)
+
+    modalOpts:
       backdropFade: true
       dialogFade: true
 
@@ -83,6 +90,11 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
             max: 10
 
           updateList()
+
+        when "hash"
+          e.json = {}
+          for k,v of e.value
+            e.json[k] = v.value
     )
 
 
