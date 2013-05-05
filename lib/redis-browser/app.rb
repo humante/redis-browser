@@ -55,36 +55,6 @@ class Browser
     end.values.sort_by {|e| e[:name] }
   end
 
-  def keys_tree(sep = /:+|\//)
-    keys = {}
-    full = {}
-
-    redis.keys.each do |key|
-      chunks = key.split(sep, 7)
-      full[chunks] = key
-      chunks.inject([keys,[]]) do |(xs,n), x|
-        xs[x] ||= {}
-        xs[x]
-
-        [xs[x], n]
-      end
-    end
-
-    f = lambda do |prefix, hash|
-
-      hash.map do |k,v|
-        np = (prefix + [k])
-        {
-          :name => k,
-          :full => full[np] || np.join("*"),
-          :children => f.call(np, v)
-        }
-      end.sort_by {|k| k[:name] }
-    end
-
-    f.call([], keys)
-  end
-
   def item_type(e)
     begin
       ["json", MultiJson.decode(e)]
