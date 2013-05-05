@@ -1,13 +1,33 @@
 app = angular.module('browser', ['ui.bootstrap', 'LocalStorageModule'])
 
-# app.run ($rootScope) ->
+app.config ($httpProvider) ->
+  funShow = (data, headersGetter) ->
+    document.getElementById('http-loader').style.display = "block"
+    data
 
-angular.module('browser').factory 'API', ['$http', ($http) ->
+  $httpProvider.defaults.transformRequest.push(funShow)
+  $httpProvider.responseInterceptors.push('HttpLoader')
+
+app.factory 'HttpLoader', ['$q', ($q) ->
+  (promise) ->
+    promise.then (response) ->
+      document.getElementById('http-loader').style.display = "none"
+      response
+    , (response) ->
+      document.getElementById('http-loader').style.display = "none"
+      response
+]
+
+app.factory 'API', ['$http', ($http) ->
   (connection, database) ->
     ps = {connection: connection, database: database}
     {
-      keysTree: (pattern) -> $http.get("/keys_tree.json", {
+      ping: () -> $http.get("/ping.json", {
         params: ps
+      }).then (e) -> e.data,
+
+      keys: (namespace) -> $http.get("/keys.json", {
+        params: angular.extend({}, ps, {namespace: namespace})
       }).then (e) -> e.data,
 
       get: (params) -> $http.get("/key.json", {
@@ -53,14 +73,22 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
     close: ->
       $scope.config.show = false
     save: ->
-      db.add("connection", $scope.config.connection)
-      db.add("database", $scope.config.database)
-      $scope.api = API($scope.config.connection, $scope.config.database)
+      # Check connection
+      $scope.config.error = null
 
-      $scope.fetchKeys()
-      $scope.show($scope.key)
+      test = API($scope.config.connection, $scope.config.database)
+      test.ping().then (resp) ->
+        if resp.ok
+          db.add("connection", $scope.config.connection)
+          db.add("database", $scope.config.database)
+          $scope.api = API($scope.config.connection, $scope.config.database)
 
-      $scope.config.close()
+          $scope.fetchKeys()
+          $scope.show($scope.key)
+
+          $scope.config.close()
+        else
+          $scope.config.error = resp.error
 
     setHashView: (view) ->
       $scope.config.hashView = view
@@ -75,10 +103,10 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
 
   # Scope functions
   $scope.fetchKeys = ->
-    $scope.keys = $scope.api.keysTree()
+    $scope.keys = $scope.api.keys()
 
   $scope.show = (key) ->
-    key.open = true
+    $scope.keyOpen(key)
     $scope.api.get(key: key.full).then((e) ->
       $scope.key = e
 
@@ -96,6 +124,17 @@ angular.module('browser').factory 'API', ['$http', ($http) ->
           for k,v of e.value
             e.json[k] = v.value
     )
+
+  $scope.keyOpen = (key) ->
+    console.log key.children
+    if key.count > 1 && !key.children
+      $scope.api.keys(key.full).then (keys) ->
+        key.children = keys
+
+    key.open = true
+
+  $scope.keyClose = (key) ->
+    key.open = false
 
 
   $scope.setPerPage = (i) ->

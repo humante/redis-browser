@@ -12,12 +12,15 @@ html ng-app="browser"
     link rel="stylesheet" href="/css/app.css"
 
     script type="text/ng-template" id="nav-tree-item.html"
-      span ng-show="key.children.length > 0"
-        button.btn.tree-toggle ng-hide="key.open" ng-click="key.open = true" +
-        button.btn.tree-toggle ng-show="key.open" ng-click="key.open = false" -
-      span ng-show="key.children.length == 0" -&nbsp;
+      span ng-show="key.count > 1"
+        button.btn.tree-toggle ng-hide="key.open" ng-click="keyOpen(key)" +
+        button.btn.tree-toggle ng-show="key.open" ng-click="keyClose(key)" -
+      span ng-show="key.count == 1" -&nbsp;
 
-      a href="#" ng-click="show(key)" {{ key.name }}
+      a href="#" ng-click="show(key)"
+        ' {{ key.name }}
+        small ng-show="key.count > 1"
+          | ({{ key.count }})
 
       ul.tree ng-show="key.open"
         li ng-repeat="key in key.children" ng-include="'nav-tree-item.html'"
@@ -25,6 +28,7 @@ html ng-app="browser"
 
 
   body ng-controller="BrowserCtrl"
+    #http-loader Loading...
     div modal="config.show" close="config.close()" options="config.modalOpts"
       .form-horizontal
         .modal-header
@@ -48,6 +52,8 @@ html ng-app="browser"
               select id="config-database" ng-model="config.database" ng-options="i for i in config.databases"
 
         .modal-footer
+          span.alert.alert-error.pull-left ng-show="config.error"
+            ' {{ config.error }}
           button.btn.btn-success type="submit" ng-click="config.save()" Save
 
     .navbar.navbar-inverse.navbar-fixed-top
@@ -63,7 +69,10 @@ html ng-app="browser"
               button.btn.btn-success ng-click="config.open()" Configure
             p.navbar-text.pull-right.connection-info
               ' Connected to
-              strong {{ config.connection }}
+              strong
+                ' {{ config.connection }}
+              small
+                ' ({{ config.database }})
 
 
     .container-fluid

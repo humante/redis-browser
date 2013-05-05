@@ -21,7 +21,41 @@ class Browser
     @db = db
   end
 
-  def keys_tree(sep = /:+|\/|\.+/)
+  def split_key(key)
+    if key =~ /^(.+?)(:+|\/+|\.+).+$/
+      [$1, $2]
+    else
+      [key, nil]
+    end
+  end
+
+  def keys(namespace = nil)
+    if namespace.to_s.strip.empty?
+      pattern = "*"
+      namespace = ""
+    else
+      pattern = namespace + "*"
+    end
+
+    redis.keys(pattern).inject({}) do |acc, key|
+      key.slice!(namespace) if namespace
+
+      ns, sep = split_key(key)
+
+      unless ns.strip.empty?
+        acc[ns] ||= {
+          :name => ns,
+          :full => namespace + ns + sep.to_s,
+          :count => 0
+        }
+        acc[ns][:count] += 1
+      end
+
+      acc
+    end.values.sort_by {|e| e[:name] }
+  end
+
+  def keys_tree(sep = /:+|\//)
     keys = {}
     full = {}
 
@@ -137,6 +171,13 @@ class Browser
     }.merge(data)
   end
 
+  def ping
+    redis.ping == "PONG"
+    {:ok => 1}
+  rescue => ex
+    {:error => ex.message}
+  end
+
   def redis
     @redis ||= begin
       conn = @conn || "127.0.0.1:6379"
@@ -167,12 +208,12 @@ class App < Sinatra::Base
     slim :index
   end
 
-  get '/keys_tree.json' do
-    json browser.keys_tree
+  get '/ping.json' do
+    json browser.ping
   end
 
   get '/keys.json' do
-    json browser.keys(params[:pattern])
+    json browser.keys(params[:namespace])
   end
 
   get '/key.json' do

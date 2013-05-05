@@ -40,3 +40,14 @@ body {
 .per-page { margin-top: 25px; }
 .connection-info { padding-right: 20px; }
 .keys-search { width: 100px; }
+
+#http-loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    background: gold;
+    padding: 5px 10px;
+    font-weight: bold;
+    z-index: 10000;
+}
