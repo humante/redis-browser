@@ -88,19 +88,24 @@ html ng-app="browser"
         .span9
           h4
             ' {{ key.full }}
-            small {{ key.type }}
+            small
+            ' {{ key.type }}
 
           div ng-switch="key.type"
-            pre ng-switch-when="string" {{ key.value }}
+            pre ng-switch-when="string"
+              ' {{ key.value }}
 
-            pre ng-switch-when="json" {{ key.value | json }}
+            pre ng-switch-when="json"
+              ' {{ key.value | json }}
 
             div ng-switch-when="set"
               table.table.table-striped.table-bordered.value-list
                 tr ng-repeat="e in key.values"
                   td ng-switch="e.type"
-                    pre ng-switch-when="json" {{ e.value | json }}
-                    pre ng-switch-when="string" {{ e.value }}
+                    pre ng-switch-when="json"
+                      ' {{ e.value | json }}
+                    pre ng-switch-when="string"
+                      ' {{ e.value }}
 
             div ng-switch-when="zset"
               table.table.table-striped.table-bordered.value-list
@@ -109,9 +114,12 @@ html ng-app="browser"
                   th.value-zset-score Score
                 tr ng-repeat="e in key.values"
                   td ng-switch="e.type"
-                    pre ng-switch-when="json" {{ e.value | json }}
-                    pre ng-switch-when="string" {{ e.value }}
-                  td {{ e.score }}
+                    pre ng-switch-when="json"
+                      ' {{ e.value | json }}
+                    pre ng-switch-when="string"
+                      ' {{ e.value }}
+                  td
+                    ' {{ e.score }}
 
 
             div ng-switch-when="hash"
@@ -119,7 +127,8 @@ html ng-app="browser"
               div ng-show="config.hashView == 'json'"
                 div
                   button.btn.btn-primary.pull-right ng-click="config.setHashView('table')" Switch to Table view
-                pre {{ key.json | json }}
+                pre
+                  ' {{ key.json | json }}
 
               div ng-show="config.hashView == 'table'"
                 table.table.table-striped.table-bordered.value-list
@@ -129,10 +138,13 @@ html ng-app="browser"
                       ' Value
                       button.btn.btn-primary.pull-right ng-click="config.setHashView('json')" Switch to JSON view
                   tr ng-repeat="(k,e) in key.value"
-                    td {{ k }}
+                    td
+                      ' {{ k }}
                     td ng-switch="e.type"
-                      pre ng-switch-when="json" {{ e.value | json }}
-                      pre ng-switch-when="string" {{ e.value }}
+                      pre ng-switch-when="json"
+                        ' {{ e.value | json }}
+                      pre ng-switch-when="string"
+                        ' {{ e.value }}
 
             div ng-switch-when="list"
               .alert
@@ -167,10 +179,13 @@ html ng-app="browser"
                   th.value-list-index Index
                   th Value
                 tr ng-repeat="e in key.values"
-                  td {{ e.index }}
+                  td
+                    ' {{ e.index }}
                   td ng-switch="e.type"
-                    pre ng-switch-when="json" {{ e.value | json }}
-                    pre ng-switch-when="string" {{ e.value }}
+                    pre ng-switch-when="json"
+                      ' {{ e.value | json }}
+                    pre ng-switch-when="string"
+                      ' {{ e.value }}
 
               pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
 
@@ -184,7 +199,8 @@ html ng-app="browser"
                     input.input-medium.search-query type="text" ng-model="query" placeholder="Search"
                 tr ng-repeat="e in key.values | filter:query"
                   td
-                    a href="#" ng-click="show(e)" {{ e.name }}
+                    a href="#" ng-click="show(e)"
+                      ' {{ e.name }}
                   td
                     button.btn.btn-danger ng-click="deleteKey(e)" Delete
                 tr
