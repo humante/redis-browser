@@ -42,7 +42,12 @@ module RedisBrowser
     end
 
     def browser
-      @browser ||= Browser.new(params[:connection], params[:database])
+      connection = if ENV['REDIS_URL']
+        ENV['REDIS_URL'].sub(/\Aredis:\/\//, '')
+      else
+        params[:connection]
+      end
+      @browser ||= Browser.new(connection, params[:database])
     end
   end
 end
