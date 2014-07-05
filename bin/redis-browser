@@ -4,6 +4,6 @@ $:.unshift File.expand_path('../../lib', File.symlink?(__FILE__) ? File.readlink
 
 require 'rubygems' unless Object.const_defined?(:Gem)
 
-require "redis-browser/app"
+require "redis-browser"
 
-App.run! :port => 4567
+RedisBrowser::Web.run! :port => 4569
