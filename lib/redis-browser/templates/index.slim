@@ -11,6 +11,9 @@ html ng-app="browser"
     link rel="stylesheet" href="#{root_path}css/bootstrap.min.css"
     link rel="stylesheet" href="#{root_path}css/app.css"
 
+    script type="text/javascript"
+      == js_env
+
     script type="text/ng-template" id="nav-tree-item.html"
       span ng-show="key.count > 1"
         button.btn.tree-toggle ng-hide="key.open" ng-click="keyOpen(key)" +

@@ -22,19 +22,19 @@ app.factory 'API', ['$http', ($http) ->
   (connection, database) ->
     ps = {connection: connection, database: database}
     {
-      ping: () -> $http.get("/ping.json", {
+      ping: () -> $http.get("#{jsEnv.root_path}ping.json", {
         params: ps
       }).then (e) -> e.data,
 
-      keys: (namespace) -> $http.get("/keys.json", {
+      keys: (namespace) -> $http.get("#{jsEnv.root_path}keys.json", {
         params: angular.extend({}, ps, {namespace: namespace})
       }).then (e) -> e.data,
 
-      get: (params) -> $http.get("/key.json", {
+      get: (params) -> $http.get("#{jsEnv.root_path}key.json", {
         params: angular.extend({}, ps, params)
       }).then (e) -> e.data
 
-      delete: (params) -> $http.delete("/key.json", {
+      delete: (params) -> $http.delete("#{jsEnv.root_path}key.json", {
         params: angular.extend({}, ps, params)
       })
     }

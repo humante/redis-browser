@@ -3,6 +3,14 @@ module RedisBrowser
     def root_path
       "#{env['SCRIPT_NAME']}/"
     end
+
+    def js_env
+      jsEnv = {
+        root_path: "#{root_path}"
+      }
+
+      "jsEnv = #{jsEnv.to_json};"
+    end
   end
 
   class CoffeeHandler < Sinatra::Base
