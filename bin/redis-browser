@@ -6,4 +6,4 @@ require 'rubygems' unless Object.const_defined?(:Gem)
 
 require "redis-browser"
 
-RedisBrowser::Web.run! :port => 4569
+RedisBrowser::Web.run! :port => 4567
