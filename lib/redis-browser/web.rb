@@ -9,7 +9,7 @@ module RedisBrowser
         root_path: "#{root_path}"
       }
 
-      "jsEnv = #{jsEnv.to_json};"
+      "jsEnv = #{MultiJson.dump(jsEnv)};"
     end
   end
 
