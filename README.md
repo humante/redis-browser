@@ -7,7 +7,7 @@
 * List pagination
 * Pretty print json values
 * Search keys
-
+* Can be mounted to Rails applications as engine
 
 ## Installation
 
@@ -17,8 +17,24 @@ $ gem install redis-browser
 
 ## Usage
 
+### Standalone
+
 ```bash
 $ redis-browser
+```
+
+### As engine
+
+Add to gemfile
+
+```ruby
+gem 'redis-browser'
+```
+
+And to routes.rb
+
+```ruby
+mount RedisBrowser::Web => '/redis-browser'
 ```
 
 ## Screenshots
