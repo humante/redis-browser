@@ -3,13 +3,13 @@ html ng-app="browser"
   head
     title Redis Browser
 
-    script type="text/javascript" src="/js/angular.min.js"
-    script type="text/javascript" src="/js/ui-bootstrap-tpls-0.2.0.min.js"
-    script type="text/javascript" src="/js/localStorageModule.js"
-    script type="text/javascript" src="/js/app.js"
+    script type="text/javascript" src="#{root_path}js/angular.min.js"
+    script type="text/javascript" src="#{root_path}js/ui-bootstrap-tpls-0.2.0.min.js"
+    script type="text/javascript" src="#{root_path}js/localStorageModule.js"
+    script type="text/javascript" src="#{root_path}js/app.js"
 
-    link rel="stylesheet" href="/css/bootstrap.min.css"
-    link rel="stylesheet" href="/css/app.css"
+    link rel="stylesheet" href="#{root_path}css/bootstrap.min.css"
+    link rel="stylesheet" href="#{root_path}css/app.css"
 
     script type="text/ng-template" id="nav-tree-item.html"
       span ng-show="key.count > 1"

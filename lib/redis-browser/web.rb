@@ -1,4 +1,10 @@
 module RedisBrowser
+  module WebHelpers
+    def root_path
+      "#{env['SCRIPT_NAME']}/"
+    end
+  end
+
   class CoffeeHandler < Sinatra::Base
     set :views, File.dirname(__FILE__) + '/templates/coffee'
 
@@ -8,7 +14,7 @@ module RedisBrowser
   end
 
   class Web < Sinatra::Base
-    helpers Sinatra::JSON
+    helpers Sinatra::JSON, WebHelpers
     use CoffeeHandler
 
     set :public_dir, File.dirname(__FILE__) + '/public'
