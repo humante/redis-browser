@@ -13,6 +13,14 @@ options = {
 OptionParser.new do |opts|
   opts.banner = "Usage: redis-browser [options]"
 
+  opts.on("-C PATH", "--config PATH", "Path to YAML config file") do |v|
+    require 'yaml'
+    require 'erb'
+
+    config = YAML.load(ERB.new(IO.read(v)).result)
+    options.merge!(config)
+  end
+
   opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
     options['bind'] = v
   end
