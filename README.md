@@ -8,6 +8,7 @@
 * Pretty print json values
 * Search keys
 * Can be mounted to Rails applications as engine
+* Can connect to multiple databases
 
 ## Installation
 
@@ -23,6 +24,26 @@ $ gem install redis-browser
 $ redis-browser
 ```
 
+You can predefine a list of available connections in a YAML file in couple of ways.
+
+```yaml
+connections:
+  default:
+    url: redis://127.0.0.1:6379/0
+  production:
+    host: mydomain.com
+    port: 6666
+    db: 1
+```
+
+Then start with
+
+```bash
+$ redis-browser -C path/to/config.yml
+```
+
+Run with `--help` to see what other options are available.
+
 ### As engine
 
 Add to gemfile
@@ -37,13 +58,20 @@ And to routes.rb
 mount RedisBrowser::Web => '/redis-browser'
 ```
 
+Use `config/initializers/redis-browser.rb` to predefine a list of available connections
+
+```ruby
+config = Rails.root.join('config', 'redis-browser.yml')
+settings = YAML.load(ERB.new(IO.read(config)).result)
+RedisBrowser.configure(settings)
+```
+
 ## Screenshots
 
 ![Browse keys](https://dl.dropboxusercontent.com/u/70986/redis-browser/2.png)
 ![See list with pagination](https://dl.dropboxusercontent.com/u/70986/redis-browser/3.png)
 ![ZSET support](https://dl.dropboxusercontent.com/u/70986/redis-browser/4.png)
 ![JSON pretty print](https://dl.dropboxusercontent.com/u/70986/redis-browser/5.png)
-![Configuration](https://dl.dropboxusercontent.com/u/70986/redis-browser/6.png)
 
 ## Contributing
 
