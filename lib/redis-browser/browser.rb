@@ -87,6 +87,7 @@ module RedisBrowser
     end
 
     def get_keys(key)
+      key ||= ""
       key << "*" unless key.end_with?("*")
 
       values = redis.keys(key).map do |k|

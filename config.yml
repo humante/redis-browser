@@ -1,0 +1,8 @@
+connections:
+  localhost:
+    url: redis://127.0.0.1:6379/0
+  other:
+    host: 127.0.0.1
+    port: 6379
+    db: 1
+  url_db_1: redis://127.0.0.1:6379/1
