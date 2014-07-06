@@ -5,11 +5,16 @@ $:.unshift File.expand_path('../../lib', File.symlink?(__FILE__) ? File.readlink
 require 'rubygems' unless Object.const_defined?(:Gem)
 require 'optparse'
 
+# Sinatra runtime options
 options = {
   bind: '127.0.0.1',
-  port: 4567,
-  connections: {
-    default: 'redis://127.0.0.1:6379/0'
+  port: 4567
+}
+
+# Application specific settings
+settings = {
+  'connections' => {
+    'default' => 'redis://127.0.0.1:6379/0'
   }
 }
 
@@ -21,7 +26,7 @@ OptionParser.new do |opts|
     require 'erb'
 
     config = YAML.load(ERB.new(IO.read(v)).result)
-    options.merge!(config)
+    settings.merge!(config)
   end
 
   opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
@@ -35,4 +40,5 @@ end.parse!
 
 require "redis-browser"
 
+RedisBrowser.configure settings
 RedisBrowser::Web.run! options
