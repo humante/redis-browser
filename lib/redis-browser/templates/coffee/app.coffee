@@ -19,8 +19,8 @@ app.factory 'HttpLoader', ['$q', ($q) ->
 ]
 
 app.factory 'API', ['$http', ($http) ->
-  (connection, database) ->
-    ps = {connection: connection, database: database}
+  (connection) ->
+    ps = {connection: connection}
     {
       ping: () -> $http.get("#{jsEnv.root_path}ping.json", {
         params: ps
@@ -59,14 +59,14 @@ app.factory 'API', ['$http', ($http) ->
   $scope.keys = []
   $scope.key = {type: "empty"}
   $scope.list = {}
+  $scope.connections = jsEnv.connections
+  $scope.config = {connection: jsEnv.connection}
 
   db = localStorageService
 
   $scope.config =
-    connection: db.get("connection") || "127.0.0.1:6379"
-    database:   parseInt(db.get("database")) || 0
+    connection: db.get("connection") || $scope.config.connection
     hashView:   db.get("hashView") || "table"
-    databases:  [0..15]
 
     open: ->
       $scope.config.show = true
@@ -76,12 +76,11 @@ app.factory 'API', ['$http', ($http) ->
       # Check connection
       $scope.config.error = null
 
-      test = API($scope.config.connection, $scope.config.database)
+      test = API($scope.config.connection)
       test.ping().then (resp) ->
         if resp.ok
           db.add("connection", $scope.config.connection)
-          db.add("database", $scope.config.database)
-          $scope.api = API($scope.config.connection, $scope.config.database)
+          $scope.api = API($scope.config.connection)
 
           $scope.fetchKeys()
           $scope.show($scope.key)
@@ -98,7 +97,7 @@ app.factory 'API', ['$http', ($http) ->
       backdropFade: true
       dialogFade: true
 
-  $scope.api = API($scope.config.connection, $scope.config.database)
+  $scope.api = API($scope.config.connection)
 
 
   # Scope functions

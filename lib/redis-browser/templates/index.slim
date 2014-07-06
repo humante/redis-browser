@@ -41,18 +41,7 @@ html ng-app="browser"
           .control-group
             label.control-label for="config-connection" Connection
             .controls
-              input type="text" id="config-connection" ng-model="config.connection"
-              span.help-block
-                | Examples:
-                code 127.0.0.1:6379
-                | ,
-                code= "/tmp/redis.sock"
-                | etc.
-
-          .control-group
-            label.control-label for="config-database" Database
-            .controls
-              select id="config-database" ng-model="config.database" ng-options="i for i in config.databases"
+              select id="config-connection" ng-model="config.connection" ng-options="name as name for (name, opts) in connections" ng-required="required"
 
         .modal-footer
           span.alert.alert-error.pull-left ng-show="config.error"
@@ -74,8 +63,6 @@ html ng-app="browser"
               ' Connected to
               strong
                 ' {{ config.connection }}
-              small
-                ' ({{ config.database }})
 
 
     .container-fluid

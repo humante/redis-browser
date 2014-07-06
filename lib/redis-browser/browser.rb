@@ -1,8 +1,7 @@
 module RedisBrowser
   class Browser
-    def initialize(conn = nil, db = 0)
+    def initialize(conn = {})
       @conn = conn
-      @db = db
     end
 
     def split_key(key)
@@ -134,18 +133,7 @@ module RedisBrowser
 
     def redis
       @redis ||= begin
-        conn = @conn || "127.0.0.1:6379"
-        db = @db || 0
-
-        opts = if conn.start_with?("/")
-          {:path => conn}
-        else
-          host, port = conn.split(":", 2)
-          {:host => host, :port => port}
-        end
-
-        r = Redis.new(opts)
-        r.select(db)
+        r = Redis.new(@conn)
         r
       end
     end
