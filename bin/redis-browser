@@ -3,7 +3,25 @@
 $:.unshift File.expand_path('../../lib', File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__)
 
 require 'rubygems' unless Object.const_defined?(:Gem)
+require 'optparse'
+
+options = {
+  bind: '127.0.0.1',
+  port: 4567
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: redis-browser [options]"
+
+  opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
+    options['bind'] = v
+  end
+
+  opts.on("-P PORT", "--port PORT", "Port number to listen on") do |v|
+    options['port'] = v
+  end
+end.parse!
 
 require "redis-browser"
 
-RedisBrowser::Web.run! :port => 4567
+RedisBrowser::Web.run! options
