@@ -1,4 +1,4 @@
-# Redis Browser
+# Redis Browser [![Gem Version](https://badge.fury.io/rb/redis-browser.png)](http://badge.fury.io/rb/redis-browser)
 
 ## Features
 
