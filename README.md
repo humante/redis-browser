@@ -34,6 +34,7 @@ connections:
     host: mydomain.com
     port: 6666
     db: 1
+    auth: password
 ```
 
 Then start with

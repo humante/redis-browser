@@ -135,6 +135,8 @@ module RedisBrowser
     def redis
       @redis ||= begin
         r = Redis.new(@conn)
+        auth = @conn['auth']
+        r.auth(auth) if auth
         r
       end
     end
