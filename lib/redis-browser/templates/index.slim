@@ -11,10 +11,6 @@ html ng-app="browser"
     link rel="stylesheet" href="#{root_path}css/bootstrap.min.css"
     link rel="stylesheet" href="#{root_path}css/app.css"
 
-    script type="text/javascript" src="#{root_path}js/jquery.min.js"
-    script type="text/javascript" src="#{root_path}js/imgpreview.full.jquery.js"
-    script type="text/javascript" src="#{root_path}js/site.js"
-
     script type="text/javascript"
       == js_env
 
@@ -134,15 +130,12 @@ html ng-app="browser"
                   tr ng-repeat="(k,e) in key.value"
                     td
                       ' {{ k }}
-                    td ng-switch="e.type"
-                      pre ng-switch-when="json"
-                        ' {{ e.value | json }}
-                      div ng-switch="is_href(e.value)"
-                        div ng-switch-when="true"
-                            a class="preview" target="_blank" href="{{ e.value }}" {{ e.value }}
+                    td ng-switch="is_href(e.value)"
+                      pre ng-switch-when="true"
+                          a class="preview" target="_blank" href="{{ e.value }}" {{ e.value }}
 
-                        div ng-switch-when="false "
-                            ' {{ e.value }}
+                      pre ng-switch-when="false"
+                          ' {{ e.value }}
             div ng-switch-when="list"
               .alert
                 ' Showing
