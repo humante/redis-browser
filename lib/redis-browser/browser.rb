@@ -39,11 +39,7 @@ module RedisBrowser
     end
 
     def item_type(e)
-      begin
-        ["json", MultiJson.decode(e)]
-      rescue MultiJson::LoadError => ex
-        ["string", e]
-      end
+      ["string", e]
     end
 
     def get_list(key, opts = {})
@@ -123,6 +119,21 @@ module RedisBrowser
         :full => key,
         :type => type
       }.merge(data)
+    end
+
+    def edit(type, key, value, field=nil)
+      print 'edit'
+      print type
+      print key
+      print value
+      case type
+         when 'string'
+           redis.set(key, value)
+        when 'hash'
+          redis.hset(key, field, value)
+        else
+          print 'not match'
+       end
     end
 
     def ping

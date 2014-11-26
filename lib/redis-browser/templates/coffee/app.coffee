@@ -37,6 +37,8 @@ app.factory 'API', ['$http', ($http) ->
       delete: (params) -> $http.delete("#{jsEnv.root_path}key.json", {
         params: angular.extend({}, ps, params)
       })
+
+      edit: (params) -> $http.put("#{jsEnv.root_path}edit.json", angular.extend({}, ps, params))
     }
 ]
 
@@ -190,4 +192,25 @@ app.factory 'API', ['$http', ($http) ->
   # Init
   $scope.fetchKeys()
 
+@EditCtrl = ($scope, API) ->
+  $scope.config = {connection: jsEnv.connection}
+  $scope.api = API($scope.config.connection)
 
+  $scope.edit_str = (key, value) ->
+    console.log('item. key', key, 'value', value)
+    $scope.api.edit(
+      type: 'string',
+      key: key,
+      value: value
+    ).then ->
+      $scope.isCollapsed = false
+
+  $scope.edit_hash = (key, field, value) ->
+    console.log('item. key', key, 'value', value)
+    $scope.api.edit(
+      type: 'hash',
+      key: key,
+      field: field,
+      value: value
+    ).then ->
+      $scope.isCollapsed = false

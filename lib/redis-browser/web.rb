@@ -51,6 +51,13 @@ module RedisBrowser
       json :ok => true
     end
 
+    put '/edit.json' do
+      data = JSON.parse request.body.read
+      print data
+      browser.edit(data['type'], data['key'], data['value'], data['field'])
+      json :ok => true
+    end
+
     def browser
       conn = settings.connections[params[:connection]]
       conn = {url: conn} unless conn.is_a?(Hash)
