@@ -62,6 +62,9 @@ app.factory 'API', ['$http', ($http) ->
   $scope.connections = jsEnv.connections
   $scope.config = {connection: jsEnv.connection}
 
+  $scope.is_href = (value) ->
+    /^http/.test(value)
+
   db = localStorageService
 
   $scope.config =
