@@ -122,10 +122,6 @@ module RedisBrowser
     end
 
     def edit(type, key, value, field=nil)
-      print 'edit'
-      print type
-      print key
-      print value
       case type
          when 'string'
            redis.set(key, value)

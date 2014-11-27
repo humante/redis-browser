@@ -53,7 +53,6 @@ module RedisBrowser
 
     put '/edit.json' do
       data = JSON.parse request.body.read
-      print data
       browser.edit(data['type'], data['key'], data['value'], data['field'])
       json :ok => true
     end
