@@ -10,6 +10,7 @@ html ng-app="browser"
 
     link rel="stylesheet" href="#{root_path}css/bootstrap.min.css"
     link rel="stylesheet" href="#{root_path}css/app.css"
+    link href="#{root_path}css/font-awesome.min.css" rel="stylesheet"
 
     script type="text/javascript"
       == js_env
@@ -82,11 +83,12 @@ html ng-app="browser"
             ' {{ key.type }}
 
           div ng-switch="key.type"
-            pre ng-switch-when="string"
+            pre ng-switch-when="string" ng-controller="EditCtrl"
               ' {{ key.value }}
-
-            pre ng-switch-when="json"
-              ' {{ key.value | json }}
+              i class="fa fa-lg fa-pencil-square-o pull-right" ng-click="isCollapsed = !isCollapsed"
+              div.input-append.pull-right collapse="!isCollapsed"
+                input.span4 ng-model="key.value"
+                button.btn ng-click="edit_str(key.full, key.value)" Save
 
             div ng-switch-when="set"
               table.table.table-striped.table-bordered.value-list
@@ -127,14 +129,16 @@ html ng-app="browser"
                     th
                       ' Value
                       button.btn.btn-primary.pull-right ng-click="config.setHashView('json')" Switch to JSON view
-                  tr ng-repeat="(k,e) in key.value"
+                  tr ng-repeat="(k,e) in key.value" ng-controller="EditCtrl"
                     td
                       ' {{ k }}
-                    td ng-switch="e.type"
-                      pre ng-switch-when="json"
-                        ' {{ e.value | json }}
-                      pre ng-switch-when="string"
+                    td
+                      pre
                         ' {{ e.value }}
+                        i class="fa fa-lg fa-pencil-square-o pull-right" ng-click="isCollapsed = !isCollapsed"
+                        div.input-append.pull-right collapse="!isCollapsed"
+                          input.span4 ng-model="e.value"
+                          button.btn ng-click="edit_hash(key.full, k, e.value)" Save
 
             div ng-switch-when="list"
               .alert
