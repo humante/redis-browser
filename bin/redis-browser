@@ -8,29 +8,55 @@ require 'optparse'
 require "redis-browser"
 
 # Sinatra runtime options
-options = {
+sinatra_options = {
   bind: '127.0.0.1',
   port: 4567
 }
 
-OptionParser.new do |opts|
+# Store RedisBrowser config
+redis_config = RedisBrowser::DEFAULTS
+
+optparse = OptionParser.new do |opts|
   opts.banner = "Usage: redis-browser [options]"
 
+  ## YAML config ##
   opts.on("-C PATH", "--config PATH", "Path to YAML config file") do |v|
     require 'yaml'
     require 'erb'
 
-    config = YAML.load(ERB.new(IO.read(v)).result)
-    RedisBrowser.configure(config)
+    redis_config = YAML.load(ERB.new(IO.read(v)).result)
+    RedisBrowser.configure(redis_config)
   end
 
+  ## Sinatra options ##
   opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
-    options['bind'] = v
+    sinatra_options['bind'] = v
   end
-
   opts.on("-P PORT", "--port PORT", "Port number to listen on") do |v|
-    options['port'] = v
+    sinatra_options['port'] = v
   end
-end.parse!
 
-RedisBrowser::Web.run! options
+  ## redis-cli options ##
+  opts.on("-h <hostname>", "Server hostname (default: 127.0.0.1)") do |v|
+    redis_config['connections']['default']['host'] = v
+  end
+  opts.on("-p <port>", "Server port (default: 6379)") do |v|
+    redis_config['connections']['default']['port'] = v
+  end
+  opts.on("-a <password>", "Password to use when connecting to the server") do |v|
+    redis_config['connections']['default']['auth'] = v
+  end
+  opts.on("-n <db>", "Database number") do |v|
+    redis_config['connections']['default']['db'] = v
+  end
+end
+
+begin
+    optparse.parse!
+rescue OptionParser::MissingArgument, OptionParser::InvalidOption
+    puts optparse
+    exit 1
+end
+
+RedisBrowser.configure(redis_config)
+RedisBrowser::Web.run!(sinatra_options)
