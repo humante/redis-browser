@@ -29,7 +29,7 @@ optparse = OptionParser.new do |opts|
   end
 
   ## Sinatra options ##
-  opts.on("-B ADDRESS", "--bind ADDRESS", "Sinatra hostname or IP to listen on") do |v|
+  opts.on("-B ADDRESS", "--bind ADDRESS", "Sinatra hostname or IP to listen on (default: 127.0.0.1)") do |v|
     sinatra_options['bind'] = v
   end
   opts.on("-P PORT", "--port PORT", "Sinatra port to listen on (default: 4567)") do |v|
