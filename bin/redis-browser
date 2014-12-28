@@ -46,7 +46,7 @@ optparse = OptionParser.new do |opts|
   opts.on("-a <password>", "Password to use when connecting to the server") do |v|
     redis_config['connections']['default']['auth'] = v
   end
-  opts.on("-n <db>", "Database number") do |v|
+  opts.on("-n <db>", "Database number (default: 0)") do |v|
     redis_config['connections']['default']['db'] = v
   end
 end
