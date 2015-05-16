@@ -67,6 +67,19 @@ settings = YAML.load(ERB.new(IO.read(config)).result)
 RedisBrowser.configure(settings)
 ```
 
+### Protect with HTTP Basic Auth
+
+`RedisBrowser::Web` is a Sinatra app, so you can inject any Rack middleware into it.
+
+```ruby
+# config/initializers/redis-browser.rb
+RedisBrowser::Web.class_eval do
+  use Rack::Auth::Basic, "Protected Area" do |username, password|
+    username == 'foo' && password == 'bar'
+  end
+end
+```
+
 ## Screenshots
 
 ![Browse keys](https://dl.dropboxusercontent.com/u/70986/redis-browser/2.png)
