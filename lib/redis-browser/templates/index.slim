@@ -7,9 +7,11 @@ html ng-app="browser"
     script type="text/javascript" src="#{root_path}js/ui-bootstrap-tpls-0.2.0.min.js"
     script type="text/javascript" src="#{root_path}js/localStorageModule.js"
     script type="text/javascript" src="#{root_path}js/app.js"
+    script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"
 
     link rel="stylesheet" href="#{root_path}css/bootstrap.min.css"
     link rel="stylesheet" href="#{root_path}css/app.css"
+    link rel="stylesheet" href="#{root_path}css/github.css"
 
     script type="text/javascript"
       == js_env
@@ -82,8 +84,7 @@ html ng-app="browser"
             ' {{ key.type }}
 
           div ng-switch="key.type"
-            pre ng-switch-when="string"
-              ' {{ key.value }}
+            pre ng-switch-when="string" prettyprint="key.value"
 
             pre ng-switch-when="json"
               ' {{ key.value | json }}
@@ -94,7 +95,7 @@ html ng-app="browser"
                   td ng-switch="e.type"
                     pre ng-switch-when="json"
                       ' {{ e.value | json }}
-                    pre ng-switch-when="string"
+                    pre ng-switch-default="" prettyprint="e.value"
                       ' {{ e.value }}
 
             div ng-switch-when="zset"
@@ -106,8 +107,7 @@ html ng-app="browser"
                   td ng-switch="e.type"
                     pre ng-switch-when="json"
                       ' {{ e.value | json }}
-                    pre ng-switch-when="string"
-                      ' {{ e.value }}
+                    pre ng-switch-default="" prettyprint="e.value"
                   td
                     ' {{ e.score }}
 
@@ -133,8 +133,7 @@ html ng-app="browser"
                     td ng-switch="e.type"
                       pre ng-switch-when="json"
                         ' {{ e.value | json }}
-                      pre ng-switch-when="string"
-                        ' {{ e.value }}
+                      pre ng-switch-default="" prettyprint="e.value"
 
             div ng-switch-when="list"
               .alert
@@ -174,8 +173,7 @@ html ng-app="browser"
                   td ng-switch="e.type"
                     pre ng-switch-when="json"
                       ' {{ e.value | json }}
-                    pre ng-switch-when="string"
-                      ' {{ e.value }}
+                    pre ng-switch-default="" prettyprint="e.value"
 
               pagination boundary-links="true" num-pages="list.pages" current-page="list.current" max-size="list.max"
 
@@ -200,6 +198,3 @@ html ng-app="browser"
 
 
               / span.alert.alert-danger Key not found
-
-
-
