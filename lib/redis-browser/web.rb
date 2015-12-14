@@ -34,7 +34,7 @@ module RedisBrowser
       slim :index
     end
 
-    get '/exportCSV' do
+    get '/export-csv' do
       result = browser.exportCSV(params[:include], params[:exclude])
       if result.is_a? String
         content_type 'text/csv'
