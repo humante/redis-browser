@@ -40,7 +40,13 @@ connections:
 Then start with
 
 ```bash
-$ redis-browser -C path/to/config.yml
+$ redis-browser --config path/to/config.yml
+```
+
+Or quickly connect to a database without the hassle of creating custom configuration file
+
+```bash
+$ redis-browser --url redis://hostname:6379
 ```
 
 Run with `--help` to see what other options are available.

@@ -24,6 +24,12 @@ OptionParser.new do |opts|
     RedisBrowser.configure(config)
   end
 
+  opts.on("-U URL", "--url URL", "Connection URL. Defaults to redis://127.0.0.1:6379/0") do |v|
+    v = "redis://#{v}" unless v =~ /^redis:\/\//
+    config = { 'connections' => { 'default' => v } }
+    RedisBrowser.configure(config)
+  end
+
   opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
     options['bind'] = v
   end
