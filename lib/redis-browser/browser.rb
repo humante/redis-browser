@@ -10,14 +10,20 @@ module RedisBrowser
       else
         [key, nil]
       end
+    rescue ArgumentError
+      [key, nil]
     end
 
     def keys(namespace = nil)
-      if namespace.to_s.strip.empty?
-        pattern = "*"
-        namespace = ""
-      else
-        pattern = namespace + "*"
+      begin
+        if namespace.to_s.strip.empty?
+          pattern = "*"
+          namespace = ""
+        else
+          pattern = namespace + "*"
+        end
+      rescue ArgumentError
+        pattern, namespace = "*", ""
       end
 
       redis.keys(pattern).inject({}) do |acc, key|
@@ -25,13 +31,16 @@ module RedisBrowser
 
         ns, sep = split_key(key)
 
-        unless ns.strip.empty?
-          acc[ns] ||= {
-            :name => ns,
-            :full => namespace + ns + sep.to_s,
-            :count => 0
-          }
-          acc[ns][:count] += 1
+        begin
+          unless ns.strip.empty?
+            acc[ns] ||= {
+              :name => ns,
+              :full => namespace + ns + sep.to_s,
+              :count => 0
+            }
+            acc[ns][:count] += 1
+          end
+        rescue ArgumentError
         end
 
         acc
@@ -41,7 +50,7 @@ module RedisBrowser
     def item_type(e)
       begin
         ["json", MultiJson.decode(e)]
-      rescue MultiJson::LoadError => ex
+      rescue MultiJson::LoadError
         ["string", e]
       end
     end
