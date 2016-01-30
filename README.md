@@ -10,6 +10,10 @@
 * Can be mounted to Rails applications as engine
 * Can connect to multiple databases
 
+## Required
+
+* Ruby Version ">=1.9.2"
+
 ## Installation
 
 ```bash
