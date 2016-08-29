@@ -16,6 +16,14 @@
 
 ## Installation
 
+To use with ruby version < 2.2, you must install specifically from 0.4 line which is maintained in `ruby-1.9.2+` branch.
+
+```bash
+$ gem install redis-browser --version '~> 0.4.0'
+```
+
+Otherwise install the newest version.
+
 ```bash
 $ gem install redis-browser
 ```
@@ -61,6 +69,12 @@ Add to gemfile
 
 ```ruby
 gem 'redis-browser'
+```
+
+To use with ruby version < 2.2 specify the version from 0.4 line.
+
+```ruby
+gem 'redis-browser', '~> 0.4.0'
 ```
 
 And to routes.rb
