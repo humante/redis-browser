@@ -37,6 +37,11 @@ OptionParser.new do |opts|
   opts.on("-P PORT", "--port PORT", "Port number to listen on") do |v|
     options['port'] = v
   end
+
+  opts.on("-v", "--version", "Display version number") do
+    puts RedisBrowser::VERSION
+    exit
+  end
 end.parse!
 
 RedisBrowser::Web.run! options
