@@ -8,7 +8,7 @@ require 'optparse'
 require "redis-browser"
 
 # Sinatra runtime options
-options = {
+sinatra_options = {
   bind: '127.0.0.1',
   port: 4567
 }
@@ -31,11 +31,11 @@ OptionParser.new do |opts|
   end
 
   opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
-    options['bind'] = v
+    sinatra_options['bind'] = v
   end
 
   opts.on("-P PORT", "--port PORT", "Port number to listen on") do |v|
-    options['port'] = v
+    sinatra_options['port'] = v
   end
 
   opts.on("-v", "--version", "Display version number") do
@@ -44,4 +44,4 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-RedisBrowser::Web.run! options
+RedisBrowser::Web.run! sinatra_options
