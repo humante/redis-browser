@@ -6,11 +6,11 @@ require 'redis-browser/version'
 Gem::Specification.new do |spec|
   spec.name          = "redis-browser"
   spec.version       = RedisBrowser::VERSION
-  spec.authors       = ["Tymon Tobolski"]
-  spec.email         = ["i@teamon.eu"]
+  spec.authors       = ["Tymon Tobolski", "Michał Szajbe"]
+  spec.email         = ["michal.szajbe@gmail.com"]
   spec.description   = %q{Redis browser}
   spec.summary       = %q{Redis browser}
-  spec.homepage      = "http://github.com/teamon/redis-browser"
+  spec.homepage      = "http://github.com/humante/redis-browser"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
