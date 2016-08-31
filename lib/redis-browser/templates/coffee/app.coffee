@@ -44,7 +44,7 @@ app.directive 'prettyprint', ->
     restrict: 'AE'
     link: (scope, element, attrs) ->
       scope.$watch attrs.prettyprint, (value) ->
-        element[0].innerHTML = prettyPrintOne(value)
+        element[0].innerHTML = PR.prettyPrintOne(value)
 
 @BrowserCtrl = ($scope, API, localStorageService, $dialog) ->
   # Internal functions
