@@ -13,6 +13,8 @@ sinatra_options = {
   port: 4567
 }
 
+redis_connection = {}
+
 OptionParser.new do |opts|
   opts.banner = "Usage: redis-browser [options]"
 
@@ -30,6 +32,22 @@ OptionParser.new do |opts|
     RedisBrowser.configure(config)
   end
 
+  opts.on("-h HOSTNAME", "Default redis connection hostname") do |v|
+    redis_connection['host'] = v
+  end
+
+  opts.on("-p PORT", "Default redis connection port") do |v|
+    redis_connection['port'] = v
+  end
+
+  opts.on("-n DB", "Default redis connection database number") do |v|
+    redis_connection['db'] = v
+  end
+
+  opts.on("-a PASSWORD", "Default redis connection password") do |v|
+    redis_connection['auth'] = v
+  end
+
   opts.on("-B ADDRESS", "--bind ADDRESS", "Server hostname or IP address to listen on") do |v|
     sinatra_options['bind'] = v
   end
@@ -43,5 +61,10 @@ OptionParser.new do |opts|
     exit
   end
 end.parse!
+
+unless redis_connection.empty?
+  config = { 'connections' => { 'default' => redis_connection } }
+  RedisBrowser.configure(config)
+end
 
 RedisBrowser::Web.run! sinatra_options
