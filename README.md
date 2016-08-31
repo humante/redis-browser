@@ -61,6 +61,12 @@ Or quickly connect to a database without the hassle of creating custom configura
 $ redis-browser --url redis://hostname:6379
 ```
 
+The connection options can also be specified in similar way to `redis-cli` command
+
+```bash
+$ redis-browser -h 127.0.0.1 -p 6379 -a password -n 0
+```
+
 Run with `--help` to see what other options are available.
 
 ### As engine
