@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = RedisBrowser::VERSION
   spec.authors       = ["Tymon Tobolski", "Michał Szajbe"]
   spec.email         = ["michal.szajbe@gmail.com"]
-  spec.description   = %q{Redis browser}
-  spec.summary       = %q{Redis browser}
+  spec.description   = %q{Web-based Redis browser that can work as standalone app or mounted Rails engine.}
+  spec.summary       = %q{Web-based Redis browser}
   spec.homepage      = "http://github.com/humante/redis-browser"
   spec.license       = "MIT"
 
