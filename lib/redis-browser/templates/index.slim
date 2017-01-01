@@ -22,7 +22,7 @@ html ng-app="browser"
         button.btn.tree-toggle ng-show="key.open" ng-click="keyClose(key)" -
       span ng-show="key.count == 1" -&nbsp;
 
-      a href="#" ng-click="show(key)"
+      a href="\#{{key.full}}" ng-click="show(key)"
         ' {{ key.name }}
         small ng-show="key.count > 1"
           | ({{ key.count }})

@@ -192,3 +192,11 @@ app.directive 'prettyprint', ->
 
   # Init
   $scope.fetchKeys()
+
+
+  # If user has loaded page from a bookmark of a specific key...
+  if ( window.location.hash != null && window.location.hash != "" )
+    # Show the selected key
+    key = {name: "", full: window.location.hash.substr(2), count: 1, $$hashKey: ""}
+    $scope.show( key )
+    # TODO: expand tree to show this key
