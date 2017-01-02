@@ -22,7 +22,7 @@ html ng-app="browser"
         button.btn.tree-toggle ng-show="key.open" ng-click="keyClose(key)" -
       span ng-show="key.count == 1" -&nbsp;
 
-      a href="#" ng-click="show(key)"
+      a href="\#{{key.full}}" ng-click="show(key)"
         ' {{ key.name }}
         small ng-show="key.count > 1"
           | ({{ key.count }})
@@ -187,7 +187,7 @@ html ng-app="browser"
                     input.input-medium.search-query type="text" ng-model="query" placeholder="Search"
                 tr ng-repeat="e in key.values | filter:query"
                   td
-                    a href="#" ng-click="show(e)"
+                    a href="\#{{e.full}}" ng-click="show(e)"
                       ' {{ e.name }}
                   td
                     button.btn.btn-danger ng-click="deleteKey(e)" Delete
