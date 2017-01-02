@@ -132,9 +132,10 @@ app.directive 'prettyprint', ->
 
   $scope.keyOpen = (key) ->
     console.log key.children
-    if key.count > 1 && !key.children
+    if !key.children
       $scope.api.keys(key.full).then (keys) ->
         key.children = keys
+        console.log key.children
 
     key.open = true
 
