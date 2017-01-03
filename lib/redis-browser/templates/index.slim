@@ -17,14 +17,14 @@ html ng-app="browser"
       == js_env
 
     script type="text/ng-template" id="nav-tree-item.html"
-      span ng-show="key.count > 1"
+      span ng-show="key.has_children"
         button.btn.tree-toggle ng-hide="key.open" ng-click="keyOpen(key)" +
         button.btn.tree-toggle ng-show="key.open" ng-click="keyClose(key)" -
-      span ng-show="key.count == 1" -&nbsp;
+      span ng-show="!key.has_children" -&nbsp;
 
       a href="\#{{key.full}}" ng-click="show(key)"
         ' {{ key.name }}
-        small ng-show="key.count > 1"
+        small ng-show="key.has_children"
           | ({{ key.count }})
 
       ul.tree ng-show="key.open"
@@ -80,8 +80,9 @@ html ng-app="browser"
         .span9
           h4
             ' {{ key.full }}
-            small
-            ' {{ key.type }}
+            small ng-show="key.type != 'none'"
+              ' type: {{ key.type }},
+              ' ttl: {{ key.ttl }}
 
           div ng-switch="key.type"
             pre ng-switch-when="string" prettyprint="key.value"

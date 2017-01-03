@@ -36,9 +36,15 @@ module RedisBrowser
             acc[ns] ||= {
               :name => ns,
               :full => namespace + ns + sep.to_s,
-              :count => 0
+              :count => 0,
+              :has_children => false
             }
             acc[ns][:count] += 1
+
+            # If this key contains separators, then it must have children
+            if sep
+              acc[ns][:has_children] = true
+            end
           end
         rescue ArgumentError
         end
@@ -112,6 +118,7 @@ module RedisBrowser
 
     def get(key, opts = {})
       type = redis.type(key)
+      ttl  = redis.ttl(key)
       data = case type
       when "string"
         type, value = item_type(redis.get(key))
@@ -130,7 +137,8 @@ module RedisBrowser
 
       {
         :full => key,
-        :type => type
+        :type => type,
+        :ttl  => ttl
       }.merge(data)
     end
 
