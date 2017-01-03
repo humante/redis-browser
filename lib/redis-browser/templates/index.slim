@@ -80,8 +80,9 @@ html ng-app="browser"
         .span9
           h4
             ' {{ key.full }}
-            small
-            ' {{ key.type }}
+            small ng-show="key.type != 'none'"
+              ' type: {{ key.type }},
+              ' ttl: {{ key.ttl }}
 
           div ng-switch="key.type"
             pre ng-switch-when="string" prettyprint="key.value"

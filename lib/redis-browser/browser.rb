@@ -118,6 +118,7 @@ module RedisBrowser
 
     def get(key, opts = {})
       type = redis.type(key)
+      ttl  = redis.ttl(key)
       data = case type
       when "string"
         type, value = item_type(redis.get(key))
@@ -136,7 +137,8 @@ module RedisBrowser
 
       {
         :full => key,
-        :type => type
+        :type => type,
+        :ttl  => ttl
       }.merge(data)
     end
 
