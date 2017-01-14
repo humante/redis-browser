@@ -55,8 +55,8 @@ module RedisBrowser
 
     def item_type(e)
       begin
-        ["json", MultiJson.decode(e)]
-      rescue MultiJson::LoadError
+        ["json", Marshal.load(e)]
+      rescue TypeError
         ["string", e]
       end
     end
