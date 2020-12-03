@@ -135,6 +135,7 @@ html ng-app="browser"
                       pre ng-switch-when="json"
                         ' {{ e.value | json }}
                       pre ng-switch-default="" prettyprint="e.value"
+                        ' {{ e.value }}
 
             div ng-switch-when="list"
               .alert
