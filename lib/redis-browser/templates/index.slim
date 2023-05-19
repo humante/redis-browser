@@ -86,6 +86,7 @@ html ng-app="browser"
 
           div ng-switch="key.type"
             pre ng-switch-when="string" prettyprint="key.value"
+              ' {{ key.value }}
 
             pre ng-switch-when="json"
               ' {{ key.value | json }}
@@ -135,6 +136,7 @@ html ng-app="browser"
                       pre ng-switch-when="json"
                         ' {{ e.value | json }}
                       pre ng-switch-default="" prettyprint="e.value"
+                        ' {{ e.value }}
 
             div ng-switch-when="list"
               .alert
