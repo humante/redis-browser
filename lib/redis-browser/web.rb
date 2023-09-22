@@ -34,6 +34,17 @@ module RedisBrowser
       slim :index
     end
 
+    get '/export-csv' do
+      result = browser.exportCSV(params[:include], params[:exclude])
+      if result.is_a? String
+        content_type 'text/csv'
+        attachment "redis-dump.csv"
+        result
+      else
+        json result
+      end
+    end
+
     get '/ping.json' do
       json browser.ping
     end

@@ -142,6 +142,27 @@ module RedisBrowser
       }.merge(data)
     end
 
+    def exportCSV(include_pattern, exclude_pattern)
+      key = include_pattern
+      key << "*" unless key.end_with?("*")
+      exclude_rx = Regexp.new(exclude_pattern)
+      keys = redis.keys(key).select { |k| exclude_rx.match(k).nil? }
+      values = redis.multi do |multi|
+        keys.each { |k| multi.get(k) }
+      end
+      kv = keys.zip(values)
+
+      csv_string = CSV.generate do |csv|
+        kv.each do |k, v|
+          line = k.split(/[:\/]/) << v
+          csv << line
+        end
+      end
+      csv_string
+    rescue => ex
+      {:error => ex.message}
+    end
+
     def ping
       redis.ping == "PONG"
       {:ok => 1}

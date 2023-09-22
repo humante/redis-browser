@@ -9,6 +9,7 @@
 * Search keys
 * Can be mounted to Rails applications as engine
 * Can connect to multiple databases
+* Export keys as CSV
 
 ## Required
 

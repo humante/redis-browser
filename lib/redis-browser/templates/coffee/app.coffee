@@ -22,6 +22,10 @@ app.factory 'API', ['$http', ($http) ->
   (connection) ->
     ps = {connection: connection}
     {
+      exportCSV: (params) -> $http.get("#{jsEnv.root_path}export-csv", {
+        params: angular.extend({}, ps, params)
+      }).then (e) -> e,
+
       ping: () -> $http.get("#{jsEnv.root_path}ping.json", {
         params: ps
       }).then (e) -> e.data,
@@ -102,6 +106,45 @@ app.directive 'prettyprint', ->
     modalOpts:
       backdropFade: true
       dialogFade: true
+
+  $scope.export =
+    filename: "redis-dump.csv"
+
+    open: ->
+      $scope.export.show = true
+      $scope.export.include = $scope.key.full || "*"
+      $scope.export.exclude = $scope.connections[$scope.config.connection].exclude_pattern
+
+    close: ->
+      $scope.export.show = false
+      $scope.export.error = null
+
+    run: ->
+      $scope.api.exportCSV(
+        include: $scope.export.include,
+        exclude: $scope.export.exclude
+      ).then (response) ->
+        $scope.export.error = null
+
+        content = response.data
+        if response.headers('Content-Type').includes("text/csv")
+          hiddenElement = document.createElement('a')
+
+          hiddenElement.href = 'data:attachment/csv,' + encodeURI(content)
+          hiddenElement.target = '_blank'
+          hiddenElement.download = $scope.export.filename
+          hiddenElement.click()
+
+          $scope.config.close()
+
+          destroyA = setInterval( ->
+              hiddenElement.remove()
+              clearInterval(destroyA)
+            , 5000
+          )
+
+        else
+          $scope.export.error = content.error
 
   $scope.api = API($scope.config.connection)
 

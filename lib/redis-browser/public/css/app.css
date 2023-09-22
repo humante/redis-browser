@@ -34,11 +34,16 @@ body {
   margin-right: 5px;
 }
 
+.help-block {
+  font-size: 0.9em;
+  color: gray;
+}
+
 
 .value-list-index { width: 30px; }
 .value-zset-score { width: 30px; }
 .per-page { margin-top: 25px; }
-.connection-info { padding-right: 20px; }
+.header-item { padding-right: 20px; }
 .keys-search { width: 100px; }
 
 #http-loader {

@@ -50,6 +50,43 @@ html ng-app="browser"
             ' {{ config.error }}
           button.btn.btn-success type="submit" ng-click="config.save()" Save
 
+    div modal="export.show" close="export.close()" options="config.modalOpts"
+      .form-horizontal
+        .modal-header
+          button.close type="button" ng-click="export.close()" &times;
+          h4 Export CSV
+        .modal-body
+          .control-group
+            label.control-label for="export-include" Include keys
+            .controls
+              input.form-control id="export-include" ng-model="export.include" ng-required="required" type="text"
+
+          .control-group
+            label.control-label for="export-exclude" Exclude keys pattern
+            .controls
+              input.form-control id="export-exclude" ng-model="export.exclude" type="text"
+
+          .control-group
+            label.control-label for="export-filename" File name
+            .controls
+              input.form-control id="export-filename" ng-model="export.filename" ng-required="required" type="text"
+
+          span.help-block
+           b Include keys
+           |  is keys to include in the output as per
+           a href="http://redis.io/commands/KEYS" target="_blank"  KEYS
+           | .
+           br
+           b Exclude keys pattern
+           |  is a
+           a href="https://en.wikipedia.org/wiki/Regular_expression" target="_blank"  regex
+           |  which excludes the keys from the output.
+
+        .modal-footer
+          span.alert.alert-error.pull-left ng-show="export.error"
+            ' {{ export.error }}
+          button.btn.btn-success type="submit" ng-click="export.run()" Export
+
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
         .container-fluid
@@ -60,8 +97,10 @@ html ng-app="browser"
 
           .nav-collapse.collapse
             p.pull-right
+              button.btn.btn-default ng-click="export.open()" Export CSV
+            p.pull-right.header-item
               button.btn.btn-success ng-click="config.open()" Configure
-            p.navbar-text.pull-right.connection-info
+            p.navbar-text.pull-right.header-item
               ' Connected to
               strong
                 ' {{ config.connection }}
