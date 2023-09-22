@@ -122,7 +122,7 @@ module RedisBrowser
       data = case type
       when "string"
         type, value = item_type(redis.get(key))
-        {:value => value, :type => type}
+        {:value => fix_encoding(value), :type => type}
       when "list"
         get_list(key, opts)
       when "set"
@@ -156,6 +156,18 @@ module RedisBrowser
         r.auth(auth) if auth
         r
       end
+    end
+
+    private
+    def fix_encoding(object)
+      return object unless object.is_a?(String)
+
+      encodings = %w(UTF-8 ISO-8859-1)
+      valid_encodings = encodings.map do |encoding|
+        object.clone.force_encoding(encoding)
+      end.compact.select(&:valid_encoding?)
+
+      valid_encodings.first || object
     end
   end
 end
